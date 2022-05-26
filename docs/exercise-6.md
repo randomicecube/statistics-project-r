@@ -23,12 +23,13 @@ for (n in n_values) {
   means <- calc_means(n)
   df <- data.frame(means)
   print(
-    ggplot(df, aes(x = means)) +
-    geom_histogram(aes(y=..density..), color="black", fill="orange", bins=40) +
+    ggplot(df, aes(x=means)) +
+    geom_histogram(aes(y=after_stat(count/sum(count))), color="black", fill="orange", bins=40) +
     stat_function(fun=dnorm, args=list(mean=expected_value, sd=calc_sd(n))) +
     theme_bw() +
-    labs(x = "Distribuição da média", y = "Densidade") +
-    ggtitle(paste("Histograma e distribuição normal, n = ", n))
+    labs(x = "Distribuição da média", y = "Frequência Relativa") +
+    ggtitle(paste("Histograma e distribuição normal, n = ", n)) +
+    scale_y_continuous(breaks=seq(0, 5, .1))
   )
 }
 ```
