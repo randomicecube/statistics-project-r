@@ -63,6 +63,13 @@ de cada tamanho), e ilustrar através de um histograma de frequência relativa, 
 relação entre os valores obtidos para a distribuição das médias e a distribuição normal
 das mesmas, considerando valor esperado E(X) e a variância Var(X)/n.
 
+$$
+E(X) = \frac{(4 + 8)}{2}
+$$
+$$
+\forall_{n \in \{4, 27, 70\}}, \quad \sigma^2 = \frac{Var(X)}{n} \leftrightarrow \sigma = \sqrt{Var(X) / n} = \sqrt{\frac{(8 - 4)^2}{12n}}
+$$
+
 \vspace{0.5mm}
 Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando as bibliotecas \texttt{ggplot2, gridExtra} e \texttt{purrr}):
 
@@ -101,7 +108,7 @@ Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando as bi
 \end{lstlisting}
 
 \begin{tikzpicture}[remember picture, overlay]
-  \node [shift={(-6cm, -12.15cm)}] at (current page.north east)
+  \node [shift={(-6cm, -14.5cm)}] at (current page.north east)
     { \includegraphics[scale = 0.5]{../imgs/exercise-6.png} };
 \end{tikzpicture}
 
