@@ -19,25 +19,21 @@ calc_means <- function(n) {
   return (means)
 }
 
-for (n in n_values) {
+calc_plot <- function(n) {
   means <- calc_means(n)
   df <- data.frame(means)
-  print(
-    ggplot(df, aes(x=means)) +
-    geom_histogram(aes(y=after_stat(count/sum(count))), color="black", fill="orange", bins=40) +
+  ggplot(df, aes(x = means)) +
+    geom_histogram(aes(y=after_stat(count / sum(count))), color="white", fill="red", bins=40) +
     stat_function(fun=dnorm, args=list(mean=expected_value, sd=calc_sd(n))) +
     theme_bw() +
-    labs(x = "Distribuição da média", y = "Frequência Relativa") +
-    ggtitle(paste("Histograma e distribuição normal, n = ", n)) +
-    scale_y_continuous(breaks=seq(0, 5, .1))
-  )
+    labs(x = paste("Distribuição da média, n =", n), y = "Frequência Relativa") +
+    scale_y_continuous(breaks = seq(0, 5, .2))
 }
+
+plots <- map(n_values, calc_plot)
+grid.arrange(grobs = plots, layout_matrix = matrix(c(3,1,3,2), nrow = 2))
 ```
 
-<p align="center">
-  <img src="../imgs/exercise-6_1.png" width="275">
-  <img src="../imgs/exercise-6_2.png" width="275">
-  <img src="../imgs/exercise-6_3.png" width="275">
-</p>
+![Exercise 6](../imgs/exercise-6.png)
 
 Observando o gráfico produzido pela chamada a `ggplot`, podemos observar que aparenta haver uma concentração algo forte de utentes com valores de colesterol entre os 200 e 240, começando, para fora desse intervalo, a haver um número mais esparso de utentes. Mais ainda, olhando para a curva ilustrada no gráfico, aparenta haver uma relação (ainda que não muito forte) entre a idade e os valores de colesterol dos utentes: à medida que a idade avança, os níveis de colesterol vão, em média, aumentando gradualmente.
