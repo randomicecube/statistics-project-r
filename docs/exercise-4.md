@@ -1,4 +1,4 @@
-# Exercício 4 - Projeto Computacional PE 2022
+# Exercício 4 - Projeto Computacional PE 2022 (Diogo Gaspar)
 
 O objetivo deste exercício é procurar ilustrar, através de um gráfico de dispersão, uma possível correlação entre a Idade e o Colesterol de um conjunto de 76 utentes de um serviço de saúde. Para tal, recorreu-se ao seguinte trecho de código `R` (utilizando as bibliotecas `openxlsx` e `ggplot2`):
 

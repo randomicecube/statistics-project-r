@@ -1,4 +1,4 @@
-# Exercício 3 - Projeto Computacional PE 2022
+# Exercício 3 - Projeto Computacional PE 2022 (Diogo Gaspar)
 
 O objetivo deste exercício é representar, através de um histograma, os valores dos níveis de ozono registados em 2020 nas estações de `Paio-Pires` e `VNTelha-Maia`. Para tal, recorreu-se ao seguinte trecho de código `R` (utilizando as bibliotecas `openxlsx, ggplot2, dplyr` e `tidyr`):
 
@@ -9,7 +9,7 @@ df <- df[, c("Paio-Pires", "VNTelha-Maia")]
 df <- pivot_longer(df, "Paio-Pires":"VNTelha-Maia")
 df <- rename(df, Estações = name)
 
-ggplot(df, aes(x = value, fill = Estações)) + 
+ggplot(df, aes(x = value, fill = Estações)) +
   geom_histogram(binwidth = 4, position = position_dodge()) +
   theme_bw() +
   scale_x_continuous(breaks = round(seq(0, 200, 10), 5)) +

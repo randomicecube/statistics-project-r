@@ -1,4 +1,4 @@
-# Exercício 1 - Projeto Computacional PE 2022
+# Exercício 1 - Projeto Computacional PE 2022 (Diogo Gaspar)
 
 O objetivo deste exercício é representar, através de um diagrama de barras, a produção de _resíduos per capita_ nos países `IT- Italia`, `UK - Reino Unido` e `GR - Grecia`, nos anos 2004 e 2018. Para tal, recorreu-se ao seguinte trecho de código `R` (utilizando as bibliotecas `openxlsx, ggplot2, dplyr` e `tidyr`):
 
@@ -8,8 +8,8 @@ df <- rename(df, "Países" = "Anos", "2018" = "┴.2018")
 df <- df[df$"Países" %in% c("IT - Itália", "UK - Reino Unido", "GR - Grécia"), ]
 df <- gather(df, key = "Ano", value = "Resíduos_per_Capita", 2:3)
 
-ggplot(df, aes(x = Países, y = Resíduos_per_Capita, fill = Ano)) + 
-  geom_bar(stat = "identity", position = position_dodge()) + 
+ggplot(df, aes(x = Países, y = Resíduos_per_Capita, fill = Ano)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
   theme_minimal() +
   labs(x = "Países", y = "Resíduos per Capita") +
   ggtitle("Resíduos per Capita em Itália, Reino Unido e Grécia nos anos 2004 e 2018")

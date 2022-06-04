@@ -1,4 +1,4 @@
-# Exercício 2 - Projeto Computacional PE 2022
+# Exercício 2 - Projeto Computacional PE 2022 (Diogo Gaspar)
 
 O objetivo deste exercício é representar, através de um gráfico temporal, a evolução da Esperança Média de Vida nos países `IT- Italia`, `CY - Chipre` e `LT - Lituania`, entre os anos 2002 e 2019. Para tal, recorreu-se ao seguinte trecho de código `R` (utilizando as bibliotecas `openxlsx, ggplot2, dplyr` e `tidyr`):
 
