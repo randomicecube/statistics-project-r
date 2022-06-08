@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[10pt]{article}
 \usepackage[margin=1cm]{geometry}
 \usepackage[portuguese]{babel}
 \usepackage[utf8]{inputenc}
@@ -67,24 +67,16 @@ Para cada amostra, construir um intervalo de confiança para o inverso do valor 
 com nível de confiança $1 - \alpha = 0.94$. 
 Por fim, para cada tamanho de amostra (contaminada e não contaminada),
 calcular a média da amplitude de todos os intervalos de confiança obtidos.
-Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando as bibliotecas \texttt{ggplot2, lattice, plyr, tidyr} e \texttt{Rmisc}):
+Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando as bibliotecas \texttt{ggplot2, dplyr} e \texttt{tidyr}):
 
 \begin{lstlisting}[language=R]
   set.seed(301)
   m <- 800
   lambda_not_contaminated <- 3.13
   lambda_contaminated <- 0.53
-  theoric_confidence_interval <- 0.94
+  alpha <- 1 - 0.94
   dimensions <- seq(100, 2500, 100)
   epsilon <- 0.25
-
-  not_contaminated <- c()
-  contaminated <- c()
-  for (n in dimensions) {
-    mean_widths <- calculate_mean_widths(n)
-    not_contaminated <- c(not_contaminated, mean_widths[1])
-    contaminated <- c(contaminated, mean_widths[2])
-  }
 
   calculate_mean_widths <- function(n) {
     not_contaminated <- c()
@@ -95,36 +87,49 @@ Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando as bi
       c_exp <- rexp(contaminated_amount, rate=lambda_contaminated)
       c_exp <- c(c_exp[0:contaminated_amount], nc_exp[contaminated_amount:n])
 
-      nc_exp_confidence_interval <- CI(nc_exp, ci=theoric_confidence_interval)
-      c_exp_confidence_interval <- CI(c_exp, ci=theoric_confidence_interval)
-      not_contaminated <- c(not_contaminated, c(abs(nc_exp_confidence_interval[["upper"]] - nc_exp_confidence_interval[["lower"]])))
-      contaminated <- c(contaminated, c(abs(c_exp_confidence_interval[["upper"]] - c_exp_confidence_interval[["lower"]])))
+      nc_upper_bound <- ((1 + qnorm(1-alpha/2)/sqrt(n))/mean(nc_exp))
+      nc_lower_bound <- ((1 - qnorm(1-alpha/2)/sqrt(n))/mean(nc_exp))
+      c_upper_bound <- ((1 + qnorm(1-alpha/2)/sqrt(n))/mean(c_exp))
+      c_lower_bound <- ((1 - qnorm(1-alpha/2)/sqrt(n))/mean(c_exp))
+      not_contaminated <- c(not_contaminated, abs(nc_upper_bound - nc_lower_bound))
+      contaminated <- c(contaminated, abs(c_upper_bound - c_lower_bound))
     }
     return(c(mean(not_contaminated), mean(contaminated)))
   }
 
-  df = data.frame(dimensions, not_contaminated, contaminated)
-  df <- pivot_longer(df, "not_contaminated":"contaminated")
-  df <- rename(df, c(name="flag", value="mean_widths"))
+  not_contaminated <- c()
+  contaminated <- c()
+  for (n in dimensions) {
+    mean_widths <- calculate_mean_widths(n)
+    not_contaminated <- c(not_contaminated, mean_widths[1])
+    contaminated <- c(contaminated, mean_widths[2])
+  }
 
-  ggplot(df, aes(x = dimensions, y = mean_widths, colour = flag)) +
+  df = data.frame(dimensions, not_contaminated, contaminated)
+  df <- rename(df, "Não Contaminado" = "not_contaminated", "Contaminado" = "contaminated")
+  df <- pivot_longer(df, "Não Contaminado":"Contaminado")
+  df <- rename(df, "contaminated" = name, mean_widths = value)
+
+  ggplot(df, aes(x = dimensions, y = mean_widths, colour = contaminated)) +
     geom_line() +
     geom_point() +
     labs(x = "Dimensão da Amostra", y = "Amplitude média para 800 amostras") +
     ggtitle("Amplitude média dos intervalos de confiança da distribuição exponencial") +
     theme_bw() +
+    scale_colour_brewer(palette = "Set1") +
     theme(axis.text.x = element_text(angle = 40, hjust=1))
 \end{lstlisting}
 
 \begin{tikzpicture}[remember picture, overlay]
-  \node [shift = {(-4cm, -10.75cm)}] at (current page.north east)
-    { \includegraphics[scale = 0.5]{../imgs/exercise-10.png} };
+  \node [shift = {(-4cm, -9.25cm)}] at (current page.north east)
+    { \includegraphics[scale = 0.4]{../imgs/exercise-10.png} };
 \end{tikzpicture}
 
 Note-se que ambas as curvas, para amostras não contaminadas e contaminadas,
 seguem destinos semelhantes: começam relativamente elevadas, eventualmente
 acabando por começar a estabilizar próximo de 2500. Mais, note-se que amostras
-sem indivíduos contaminados apresentam amplitude média razoavelmente maior, levando
-portanto à conclusão de que amostras sem indivíduos contaminados têm maior grau de confiança.
+com indivíduos não contaminados apresentam amplitude média razoavelmente maior, levando
+portanto à conclusão de que amostras com indivíduos contaminados têm maior grau de confiança
+(tal deve-se, também, ao facto de $\lambda > \lambda_c$).
 
 \end{document}

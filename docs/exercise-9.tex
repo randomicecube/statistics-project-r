@@ -64,28 +64,26 @@ de valor esperado $\frac{1}{\lambda} = \frac{1}{1.32}$ para cada tamanho supra-m
 De seguida, construir para cada uma das amostras geradas um intervalo de confiança
 aproximado para $\lambda$ (com nível de confiança $1 - \alpha = 0.93$), e para cada
 tamanho de amostra calcular a média da amplitude de todos os intervalos de confiança
-obtidos.
-
-\vspace{0.5mm}
-Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando as bibliotecas \texttt{ggplot2, lattice, plyr} e \texttt{Rmisc}):
+obtidos. Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando a biblioteca \texttt{ggplot2}):
 
 \begin{lstlisting}[language=R]
   set.seed(139)
   m <- 650
   lambda <- 1.32
-  theoric_confidence_interval <- 0.93
+  alpha <- 1 - 0.93
   dimensions <- seq(100, 5000, 100)
-  
+
   calculate_mean_widths <- function(n) {
     widths <- c()
     for (i in 1:m) {
-      exp <- rexp(n, rate=lambda)
-      confidence_interval <- CI(exp, ci=theoric_confidence_interval)
-      widths <- c(widths, c(abs(confidence_interval[["upper"]] - confidence_interval[["lower"]])))
+      samples <- rexp(n, rate=lambda)
+      upper_bound <- ((1 + qnorm(1-alpha/2)/sqrt(n))/mean(samples))
+      lower_bound <- ((1 - qnorm(1-alpha/2)/sqrt(n))/mean(samples))
+      widths <- c(widths, abs(upper_bound - lower_bound))
     }
     return (mean(widths))
   }
-  
+
   mean_widths <- c()
   for (n in dimensions) {
     mean_widths <- c(mean_widths, calculate_mean_widths(n))
@@ -103,7 +101,7 @@ Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando as bi
 
 \begin{tikzpicture}[remember picture, overlay]
   \node [shift = {(0cm, 4cm)}] at (current page.south)
-    { \includegraphics[scale = 0.45]{../imgs/exercise-9.png} };
+    { \includegraphics[scale = 0.4]{../imgs/exercise-9.png} };
 \end{tikzpicture}
 
 Note-se que à medida que o tamanho da amostra aumenta, a amplitude média entre intervalos
