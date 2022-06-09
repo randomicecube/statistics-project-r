@@ -108,9 +108,9 @@ Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando as bi
   df = data.frame(dimensions, not_contaminated, contaminated)
   df <- rename(df, "Não Contaminado" = "not_contaminated", "Contaminado" = "contaminated")
   df <- pivot_longer(df, "Não Contaminado":"Contaminado")
-  df <- rename(df, "contaminated" = name, mean_widths = value)
+  df <- rename(df, "Amostra" = name, mean_widths = value)
 
-  ggplot(df, aes(x = dimensions, y = mean_widths, colour = contaminated)) +
+  ggplot(df, aes(x = dimensions, y = mean_widths, colour = Amostra)) +
     geom_line() +
     geom_point() +
     labs(x = "Dimensão da Amostra", y = "Amplitude média para 800 amostras") +
