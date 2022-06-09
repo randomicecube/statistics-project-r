@@ -59,7 +59,7 @@ tamanhos de amostras (respetivamente 4, 27, e 70) e um intervalo contínuo [4,8]
 O objetivo deste exercício passa por gerar 500 amostras com distribuição uniforme
 contínua para cada tamanho supra-mencionado. De seguida, calcular a média de cada uma
 das amostras (obtendo, assim, os valores da distribuição da média associada às amostras
-de cada tamanho), e ilustrar através de um histograma de frequência relativa, a
+de cada tamanho), e ilustrar, através de um histograma de densidade, a
 relação entre os valores obtidos para a distribuição das médias e a distribuição normal
 das mesmas, considerando valor esperado E(X) e a variância Var(X)/n.
 
@@ -80,7 +80,7 @@ Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando as bi
   a <- 4
   b <- 8
   expected_value <- (b + a) / 2
-  
+
   calc_sd <- function(n) {
     return (sqrt(((b - a)**2) / (n * 12)))
   }
@@ -91,18 +91,18 @@ Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando as bi
     }
     return (means)
   }
-  
+
   calc_plot <- function(n) {
     means <- calc_means(n)
     df <- data.frame(means)
     ggplot(df, aes(x = means)) +
-      geom_histogram(aes(y=after_stat(count / sum(count))), color="white", fill="red", bins=40) +
+      geom_histogram(aes(y=..density..), color="white", fill="orange", bins=40) +
       stat_function(fun=dnorm, args=list(mean=expected_value, sd=calc_sd(n))) +
       theme_bw() +
-      labs(x = paste("Distribuição da média, n =", n), y = "Frequência Relativa") +
+      labs(x = paste("Distribuição da média, n =", n), y = "Densidade") +
       scale_y_continuous(breaks = seq(0, 5, .2))
   }
-  
+
   plots <- map(n_values, calc_plot)
   grid.arrange(grobs = plots, layout_matrix = matrix(c(3,1,3,2), nrow = 2))
 \end{lstlisting}
@@ -113,10 +113,7 @@ Para tal, recorreu-se ao seguinte trecho de código \texttt{R} (utilizando as bi
 \end{tikzpicture}
 
 Note-se, tal como esperado, que o pico da distribuição normal encontra-se, em todos
-os histogramas, no valor 6. Mais, o tamanho da amostra aparenta ser inversamente
-proporcional ao desvio padrão, e que o tamanho da amostra não parece ter particular
-impacto nas frequências relativas dos valores da distribuição média (sendo que todos,
-no seu pico, aproximam-se de 0.1 sem nunca lá chegar, tendo decaímentos suaves para a
-esquerda e direita do pico).
+os histogramas, no valor 6, decaindo suavemente para os lados. Mais, o tamanho da amostra aparenta ser
+inversamente proporcional ao desvio padrão.
 
 \end{document}
