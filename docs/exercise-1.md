@@ -17,4 +17,4 @@ ggplot(df, aes(x = Países, y = Resíduos_per_Capita, fill = Ano)) +
 
 Observando o gráfico produzido pela chamada a `ggplot`, podemos notar que a quantidade de _resíduos per capita_ produzidos em Itália e na Grécia aumentaram no intervalo temporal em questão, diminuindo, por outro lado, no Reino Unido. Mais ainda, o Reino Unido passou de ser o maior produtor de _resíduos per capita_ por larga margem para estar empatado com a Grécia (enquanto que a Itália continua muito longe dos outros dois países).
 
-<img src="../imgs/exercise-1.png" alt="Gráfico Resultante" width="400" style="display: block; margin-left: auto; margin-right: auto;">
+<img src="../imgs/exercise-1.png" alt="Gráfico Resultante" width="350" style="display: block; margin-left: auto; margin-right: auto;">
